@@ -54,7 +54,7 @@ router.post('/comment/:id', authMiddleware, async (req, res) => {
 //     });
 // });
 
-router.post("/post", authMiddleware, async (req, res) => { //게시글db에 저장
+router.post("/post",async (req, res) => { //게시글db에 저장
     const { name, pw, memo, title, Date} = req.body; //클라이언트로 부터 입력 값 받아오기
     // const post = await Post.find({ Date }); // postId값을 찾는다
     // if (post.length) { //입력받은 데이터가 db에 이미 있을경우
