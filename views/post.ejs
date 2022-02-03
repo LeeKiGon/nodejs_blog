@@ -242,7 +242,7 @@
                                             <p style="margin: 10px;">${commentnick}</p>
                                             <button id='delete-but'style="float: right; margin:-50px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="review_delete('${commentid}')">삭제</button>
                                             <button id='modify-but'style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="off('${comment}')">수정</button>
-                                            <button id="test2" style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="comment_save('<%=list3._id%>')">확인</button>
+                                            <button id="test2" style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="comment_save('${comment}')">확인</button>
                                          </li>`                 
                         $('#r-box').append(temp_html)
                         // if(usernickname === commentnick){
