@@ -235,13 +235,8 @@
                         $('#test2').hide()
                         $('#delete-but').hide()
                         // $('#modify-but').hide()
-                        $('#comment-<%=list3._id%>').hide()
                         
                         let temp_html = `<li class="list-group-item" >
-                                              <td>
-                                                <input style="display: none;  width: 600px;" id="inputcomment">
-                                                <span id="comment-<%=list3._id%>">${comment}</span>
-                                            </td>
                                             <img src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77" style="float:left; width:50px; height:50px;">
                                             <p style="width:700px; height:60px; margin: 0px 0px 0px 70px;">${comment}</p>
                                             <p style="margin: 10px;">${commentnick}</p>
@@ -250,7 +245,6 @@
                                             <button id="test2" style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="comment_save('<%=list3._id%>')">확인</button>
                                          </li>`                 
                         $('#r-box').append(temp_html)
-                        $('#comment-<%=list3._id%>').hide()
                         // if(usernickname === commentnick){
                         //   $('#delete-but').hide()
                         //   $('#test2').hide()
