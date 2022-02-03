@@ -1,0 +1,346 @@
+</html>
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- font-awesome CSS -->
+  <script src="https://kit.fontawesome.com/727ce840af.js" crossorigin="anonymous"></script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <!-- 날짜 CDN -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <link href="/mystyle.css" rel="stylesheet" />
+  <title> 게시판 상세</title>
+</head>
+<body>
+  <nav
+    class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end"
+  >
+    <a class="navbar-brand" href="/posts">
+      <img
+        src="/logo2.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      Gon's blog
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="true"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="navbar-collapse collapse flex-grow-0"
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav mr-auto text-right">
+        <li class="nav-item" id="link-logout">
+          <a class="nav-link" data-toggle="modal" data-target="#signOutModal" style="width:1700px; height:40px; margin:auto;">
+            로그아웃<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
+          </a>
+          <div
+            class="modal text-right"
+            id="signOutModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="signOutModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="signOutModalLabel">로그아웃</h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  정말로 로그아웃 하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-outline-sparta"
+                    data-dismiss="modal"
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sparta"
+                    onclick="signOut()"
+                  >
+                    로그아웃하기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>     
+  </div>
+<style>
+  .wrap {
+    width: 800px;
+    margin: auto;
+  }
+
+  .form-group {
+    margin-top: 30px;
+  }
+
+  .label {
+    margin-top: 20px;
+  }
+
+  .btncls {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    margin-top: 10px;
+  }
+
+  .btn-primary {
+    margin-left: 20px;
+  }
+
+  .inputPwd {
+    -webkit-text-security: disc;
+  }
+</style>
+<script>
+    $(document).ready(function(){ //페이지 로드되면 자동으로 실행시켜주는 함수
+    review();
+    })
+    function signOut() {
+  localStorage.clear();
+  window.location.href = "/";
+}
+
+    function post_delete() {
+      $.ajax({ //게시글 삭제 ajax
+          type: "DELETE", //타입
+          url: "/delete", //보낼 url
+          data: {
+            Id:"<%=list._id%>", //id값
+            password:$("#pw").val()  //입력받은 pw값            
+          },
+          error: function (xhr, status, error) { //에러 처리
+            if(xhr.status===400){
+              alert(xhr.responseJSON.msg); //에러 메세지 띄어주기
+              window.location.href="/posts"; //에러시 "/"페이지로 이동
+            }
+
+          },
+          success: function (response) {
+            let msg = response["삭제 되었습니다!"]; //response["msg"]값을 변수에 저장
+            alert(msg); //alert로 띄어주기
+            window.location.href="/posts"; 
+          },
+        });
+    }
+
+    function save() { //게시글 수정 ajax
+            console.log("ss");
+            $.ajax({ 
+                async: true,
+                type: "POST", //POST 타입
+                url: "/save/<%=list.id%>", //값을 보낼 url
+                dataType: "json", //데이터 타입(json)
+                data: {memo: $("#memo").val(), //서버에 보낼 데이터
+                            password: $("#pw").val(),
+                            Id:"<%=list._id%>"},                
+                success: function(response) {
+                    alert(response["success"]);
+                    location.reload(); //성공시 새로고침
+                }
+            })
+        }
+
+        //댓글을 저장합니다.
+        function rArticle() {
+            let comment = $('#reviewbox').val()     
+
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: "/api/comment/<%=list.id%>",
+                dataType: "json",
+                data: {comment : comment},
+                headers: {
+                authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                success: function (response) {
+                    alert(response["success"]);
+                    window.location.reload();
+                }
+            });
+        }
+
+        //댓글 창 자동 영역 확장
+        function adjustHeight() {
+            var textEle = $('textarea');
+            textEle[0].style.height = 'auto';
+            var textEleHeight = textEle.prop('scrollHeight');
+            textEle.css('height', textEleHeight);
+        };
+
+        //댓글 가져와서 보여주기!!
+        function review() {
+            $.ajax({
+                type: "GET",
+                url: "/api/review/<%=list.id%>",
+                data: {},
+                headers: {
+                authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                success: function (response) {
+                    let mong = response['comment']
+                    for (let i = 0; i < mong.length; i++) {
+                      let usernickname = response['user']['nickname']
+                        let comment = mong[i]['comment']
+                        let commentid = mong[i]['_id']
+                        let commentnick = mong[i]['commentnick']
+                        
+                        let temp_html = `<li class="list-group-item" >
+                                            <img src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77" style="float:left; width:50px; height:50px;">
+                                            <p style="width:700px; height:60px; margin: 0px 0px 0px 70px;">${comment}</p>
+                                            <p style="margin: 10px;">${commentnick}</p>
+                                            <button id='delete-but'style="float: right; margin:-50px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="review_delete('${commentid}')">삭제</button>
+                                            <button id='modify-but'style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="off('${comment}')">수정</button>
+                                            <button id="test2" style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="comment_save('${commentid}')">확인</button>
+                                         </li>`
+                        $('#test2').hide()                 
+                        $('#r-box').append(temp_html)
+                        if(usernickname === commentnick){
+                          $('#delete-but').hide()
+                          $('#test2').hide()
+                        console.log(mong)
+                                        }else {
+                                          const temp_html = `<li class="list-group-item" >
+                                            <img src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77" style="float:left; width:50px; height:50px;">
+                                            <p style="width:700px; height:60px; margin: 0px 0px 0px 70px;">${comment}</p>
+                                            <p style="margin: 10px;">${commentnick}</p>
+                                         </li>`
+                                         $('#r-box').append(temp_html)
+                                        }
+                    }
+                    $('#delete-but').hide()
+                    $('#modify-but').hide()
+                     $('#test2').hide()
+                }
+            })
+        }
+
+        //댓글 삭제!!
+        function review_delete(commentid) {
+          if (!confirm("정말 삭제하시겠습니까?")) 
+          { return; }
+            $.ajax({
+                type: 'DELETE',
+                url: '/review_delete',
+                data: {id:commentid},
+                success: function (response) {
+                let msg = response["삭제 되었습니다!"]; //response["msg"]값을 변수에 저장
+                alert(msg); //alert로 띄어주기
+                location.reload();
+                }
+            });
+        }
+        //댓글 수정
+        function comment_save() {
+            console.log("ss");
+            $.ajax({ 
+                async: true,
+                type: "POST", //POST 타입
+                url: "/comment_save/<%=list.id%>", //값을 보낼 url
+                dataType: "json", //데이터 타입(json)
+                data: {comment: $("#comment").val()}, //서버에 보낼 데이터          
+                success: function(response) {
+                    alert(response["success"]);
+                    location.reload(); //성공시 새로고침
+                }
+            })
+        }
+</script>
+
+<body>  
+  <div class='wrap'>
+    <h1>게 시 판</h1>
+    <div class="form-group">
+      <div class="label">
+        <label for="exampleFormControlInput1" style="font-weight: bold;" >제목  : </label>
+        <input type="text" id="title" disabled="disabled" value= "<%= list.title %>" />
+      </div>
+      <div class="label">
+        <label for="exampleFormControlInput1" style="font-weight: bold;">작성자 :</label>
+        <input type="text" id="name" disabled="disabled" value= "<%= list.name %>"/>
+      </div>
+      <div class="label">
+        <label for="exampleFormControlInput1" style="font-weight: bold;">비밀 번호 : </label>
+        <input class="inputPwd" id="pw" type="String" name="pw"/>
+      </div>      
+      <div class="label">
+        <label for="exampleFormControlInput1">내용</label>
+        <textarea class="form-control" id="memo" type="text" rows="10" placeholder="<%= list.memo %>"></textarea>
+      </div>
+    </div>
+    <div class="btncls">
+      <button class="btn btn-danger" onclick=post_delete()>삭제하기</button>
+      <button class="btn btn-primary" type="submit" onclick="save()">글 수정</button>
+      <button class="btn btn-primary" onclick="location.href='/posts'">뒤로 가기</button>
+    </div>
+    <!-- <form action = "/api/comment" method = "post"> -->
+    <div>
+      <div class="card mb-2" style="width:800px; margin: 30px 450px 450px -2px;"
+           onkeyup="adjustHeight();">
+          <div class="card-header bg-light">
+              <i class="fa fa-comment fa"></i>댓글창
+          </div>
+          <div class="card-body" onkeyup="adjustHeight();">
+              <p id="r-box" name="comment"></p>
+              <textarea class="form-control" rows="3" id="reviewbox"></textarea>
+              <button type="button" class="btn btn-dark mt-3" onclick="rArticle()">댓글 입력</button>
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
+<!-- </from> -->
+</div>
+  </div>
+</body>
+
+</html>

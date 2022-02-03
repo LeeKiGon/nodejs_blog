@@ -1,0 +1,200 @@
+</html>
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- font-awesome CSS -->
+  <script src="https://kit.fontawesome.com/727ce840af.js" crossorigin="anonymous"></script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <!-- 날짜 CDN -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  
+  <!-- Font Awesome CSS -->
+  <link
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link href="/mystyle.css" rel="stylesheet" />
+    <title>스파르타 쇼핑몰 | 상품 목록</title>
+    <style>
+      .card {
+        cursor: pointer;
+      }
+
+      html {
+        overflow: auto;
+      }
+    </style>
+  <title> 게 시 판</title>
+  <body>
+    <nav
+      class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end"
+    >
+      <a class="navbar-brand" href="/post">
+        <img
+          src="/logo2.png"
+          width="30"
+          height="30"
+          class="d-inline-block align-top"
+          alt=""
+        />
+        Gon's blog
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="true"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="navbar-collapse collapse flex-grow-0"
+        id="navbarSupportedContent"
+      >
+        <ul class="navbar-nav mr-auto text-right">
+          <li class="nav-item" id="link-logout">
+            <a class="nav-link" data-toggle="modal" data-target="#signOutModal" style="width:1700px; height:40px; margin:auto;">
+              로그아웃<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
+            </a>
+            <div
+              class="modal text-right"
+              id="signOutModal"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="signOutModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="signOutModalLabel">로그아웃</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    정말로 로그아웃 하시겠습니까?
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-outline-sparta"
+                      data-dismiss="modal"
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sparta"
+                      onclick="signOut()"
+                    >
+                      로그아웃하기
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>     
+    </div>
+  
+</head>
+<style>
+</style>
+<script>
+  $(document).ready(function(){ //페이지 로드되면 자동으로 실행시켜주는 함수
+    post(); //ajax 자동 실행
+  })
+
+  function news() { //게시글 작성 페이지로 가기
+      location.href = '/news' //news 함수 실행시 news.ejs로 이동(.ejs 안써줘도됨 html은 써줘야함)
+  }
+  function post() { //입력 값을 클라이언트에 뿌려주는 ajax
+    $.ajax({
+      type: 'GET', //타입은 GET
+      dataType: 'json',  //데이터다입은 json
+      async: true,       //
+      url: '/api/post',  //데이터를 받아오는 url
+      data: {},
+      success: function (response) {
+        let writeList = response['post'];  //writeList 변수에 response의['post']값을 저장하기
+        
+        for (let i = 0; i < writeList.length; i++) { //writeList 값 반복문
+          let number = i //게시물 번호
+          let title = writeList[i]["title"]; //게시물 제목
+          let name = writeList[i]["name"];   //게시물 작성자
+          let date = writeList[i]["Date"];   //게시물 작성날짜
+          let _id = writeList[i]["_id"];     //db에 저장된 _id(고유한 번호)
+          let temp_html = `<tr>
+            <td>${number}</a></td>
+            <td><a href="/post/${_id}">${title}</td>
+            <td>${name}</td>
+            <td>${moment(date).format('YY/MM/DD')}</td>
+        </tr>`   //클러이언트에 뿌려주기 (temp_html를 사용해서)
+          $('#post').prepend(temp_html);  //새로 작성한문서를 윗쪽에 삽입
+        }
+      }
+    });
+  }
+</script>
+
+  </form>
+  <table class="table table-hovber" style="margin: auto; height:300px; width:900px;">
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성 날짜</th>
+      </tr>
+    </thead>
+    <tbody  id="post">
+    </tbody>     
+    </tbody>
+  </table>
+  <hr />
+  <button type="button" class="btn btn-primary" style="margin:auto; display:block;" onclick = "news()">게시글 작성</button>
+  <hr />
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">Previous</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+</body>
+
+</html>

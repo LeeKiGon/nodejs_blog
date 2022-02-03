@@ -1,0 +1,233 @@
+</html>
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- font-awesome CSS -->
+  <script src="https://kit.fontawesome.com/727ce840af.js" crossorigin="anonymous"></script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <!-- 날짜 CDN -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <link href="/mystyle.css" rel="stylesheet" />
+  <title> 게시판 작성</title>
+</head>
+<body>
+  <nav
+    class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end"
+  >
+    <a class="navbar-brand" href="/posts">
+      <img
+        src="/logo2.png"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      Gon's blog
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="true"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="navbar-collapse collapse flex-grow-0"
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav mr-auto text-right">
+        <li class="nav-item" id="link-logout">
+          <a class="nav-link" data-toggle="modal" data-target="#signOutModal" style="width:1700px; height:40px; margin:auto;">
+            로그아웃<i class="fa fa-sign-out ml-2" aria-hidden="true"></i>
+          </a>
+          <div
+            class="modal text-right"
+            id="signOutModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="signOutModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="signOutModalLabel">로그아웃</h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  정말로 로그아웃 하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-outline-sparta"
+                    data-dismiss="modal"
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sparta"
+                    onclick="signOut()"
+                  >
+                    로그아웃하기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>     
+  </div>
+<style>
+  .wrap {
+    width: 800px;
+    margin: auto;
+  }
+
+  .form-group {
+    margin-top: 30px;
+  }
+
+  .label {
+    margin-top: 20px;
+  }
+
+  .btncls {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    margin-top: 10px;
+  }
+
+  .btn-primary {
+    margin-left: 20px;
+  }
+
+  .inputPwd { 
+    -webkit-text-security: disc;
+  }
+</style>
+<script src="/api.js"></script>
+
+<script>
+  // $(document).ready(function(){ //페이지 로드되면 자동으로 실행시켜주는 함수
+  //   getSelf(); //ajax 자동 실행
+  // });
+
+  let user;
+      getSelf(function (u) {
+        user = u;
+      });    
+
+//       function getSelf(callback) {
+//   $.ajax({
+//     type: "GET",
+//     url: "/api/users/me",
+//     headers: {
+//       authorization: `Bearer ${localStorage.getItem("token")}`,
+//     },
+//     success: function (response) {
+//       callback(response.user);
+//     },
+//     error: function (xhr, status, error) {
+//       if (status == 401) {
+//         alert("로그인이 필요합니다.");
+//       } else {
+//         localStorage.clear();
+//         alert("알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.");
+//       }
+//       window.location.href = "/";
+//     },
+//   });
+// }
+  // function post_border() {
+  //   let title = $("#title").val() //title에 입력받은 값을 변수에 저장
+  //   let name = $("#name").val()   //name에 입력받은 값을 변수에 저장
+  //   let pw = $("#pw").val()       //pw에 입력받은 값을 변수에 저장
+  //   let memo = $("#memo").val()   //memp에 입력받은 값을 변수에 저장
+  //   $.ajax({
+  //     type: "POST",  //POST타입
+  //     url: `/api/post`,  //입력받은 값을 보내는 url
+  //     data: {
+  //       headers: {
+  //     authorization: `Bearer ${localStorage.getItem("token")}`,
+  //   },
+  //       //post 보낼 데이터
+  //       title: title, //변수에 입력받은 값을, 보낼 데이터
+  //       name: name,
+  //       pw: pw,
+  //       memo: memo,
+  //     },
+  //     success: function (response) {
+  //         alert("게시글이 등록 되었습니다!");
+  //         window.location.href="/" //완료되면 "/" 페이지로 이동!!(새로고침)
+  //     }
+  //   });
+  // };
+</script>
+
+<body>
+  <!--form 형식을 이용해 ajax를 이용하지 않고도 데이터를 보낼수있다-->
+  <!--처음 form 작성해주고, 마지막에 다시한번 </form>으로 닫아줌으로써 사용!!-->
+  <!--input에 있는 name값으로 입력받은 값을 담아 서버에 전송!! -->
+  <form action = "/api/post" method = "post">
+  <div class='wrap'>
+    <h1>게 시 판</h1>
+    <div class="form-group">
+      <div class="label">
+        <label for="exampleFormControlInput1" style="font-weight: bold;" >제목 : </label>
+        <input type="text" id="titles" name="title" />
+      </div>
+      <div class="label">
+        <label for="exampleFormControlInput1" style="font-weight: bold;">작성자 :</label>
+        <input type="text" id="names" name="name"/>
+      </div>
+      <div class="label">
+        <label for="exampleFormControlInput1" style="font-weight: bold;">비밀 번호 : </label>
+        <input class="inputPwd" id="pw" type="String" name="pw"/>
+      </div>
+      <div class="label">
+        <label for="exampleFormControlInput1">내용</label>
+        <textarea class="form-control" id="memo" type="text" rows="10" name="memo"></textarea>
+      </div>
+    </div>
+    <div class="btncls">
+      <button class="btn btn-primary" style="width:150px; margin:auto; display:block;" type="submit">글 작성 완료</button>      
+    </div>
+  </div>
+  </form>
+  <button class="btn btn-primary" style="width:150px; margin:auto; display:block;" onclick="location.href='/posts'">뒤로 가기</button>
+</body>
+
+</html>
