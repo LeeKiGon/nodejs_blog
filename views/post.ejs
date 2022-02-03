@@ -146,6 +146,7 @@
   localStorage.clear();
   window.location.href = "/";
 }
+let usernickname = response['user']['nickname']
 
     function post_delete() {
       $.ajax({ //게시글 삭제 ajax
@@ -226,11 +227,14 @@
                 },
                 success: function (response) {
                     let mong = response['comment']
-                    for (let i = 0; i < mong.length; i++) {
-                      let usernickname = response['user']['nickname']
+                    let usernickname = response['user']['nickname']
+                    for (let i = 0; i < mong.length; i++) {                      
                         let comment = mong[i]['comment']
                         let commentid = mong[i]['_id']
                         let commentnick = mong[i]['commentnick']
+                        $('#test2').hide()
+                        $('#delete-but').hide()
+                        $('#modify-but').hide()
                         
                         let temp_html = `<li class="list-group-item" >
                                             <img src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77" style="float:left; width:50px; height:50px;">
@@ -239,25 +243,24 @@
                                             <button id='delete-but'style="float: right; margin:-50px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="review_delete('${commentid}')">삭제</button>
                                             <button id='modify-but'style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="off('${comment}')">수정</button>
                                             <button id="test2" style="float: right; margin:-100px 0px 0px -100px;" type="button" class="btn btn-primary" onclick="comment_save('${commentid}')">확인</button>
-                                         </li>`
-                        $('#test2').hide()                 
+                                         </li>`                 
                         $('#r-box').append(temp_html)
-                        if(usernickname === commentnick){
-                          $('#delete-but').hide()
-                          $('#test2').hide()
-                        console.log(mong)
-                                        }else {
-                                          const temp_html = `<li class="list-group-item" >
-                                            <img src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77" style="float:left; width:50px; height:50px;">
-                                            <p style="width:700px; height:60px; margin: 0px 0px 0px 70px;">${comment}</p>
-                                            <p style="margin: 10px;">${commentnick}</p>
-                                         </li>`
-                                         $('#r-box').append(temp_html)
-                                        }
+                        // if(usernickname === commentnick){
+                        //   $('#delete-but').hide()
+                        //   $('#test2').hide()
+                        // console.log(mong)
+                        //                 }else {
+                        //                   const temp_html = `<li class="list-group-item" >
+                        //                     <img src="https://ssl.pstatic.net/static/cafe/cafe_pc/default/cafe_profile_77.png?type=c77_77" style="float:left; width:50px; height:50px;">
+                        //                     <p style="width:700px; height:60px; margin: 0px 0px 0px 70px;">${comment}</p>
+                        //                     <p style="margin: 10px;">${commentnick}</p>
+                        //                  </li>`
+                        //                  $('#r-box').append(temp_html)
+                        //                 }
                     }
-                    $('#delete-but').hide()
-                    $('#modify-but').hide()
-                     $('#test2').hide()
+                    // $('#delete-but').hide()
+                    // $('#modify-but').hide()
+                    //  $('#test2').hide()
                 }
             })
         }

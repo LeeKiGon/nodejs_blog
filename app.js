@@ -194,6 +194,6 @@ app.delete("/review_delete", async (req,res) =>{
 //   });
 // });
 
-app.listen(8080, () => {
+app.listen(3000, () => {
   console.log("서버가 요청을 받을 준비가 됐어요");
 });
